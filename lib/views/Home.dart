@@ -8,8 +8,8 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:promts/components/intro_card.dart';
 import 'package:promts/models/model_theme.dart';
-import 'package:promts/services/speechServices.dart';
-import 'package:promts/views/Settings.dart';
+import 'package:promts/views/AboutPage.dart';
+import 'package:promts/views/setUp.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
@@ -30,7 +30,11 @@ class _HomeState extends State<Home> {
 
   void handleScreenChanged(int selectedScreen) {
     if (selectedScreen == 0) {
-      Get.to(Settings());
+      Get.back();
+    } else if (selectedScreen == 1) {
+      Get.to(SetUp());
+    } else if (selectedScreen == 2) {
+      Get.to(About());
     }
     setState(() {
       screenIndex = selectedScreen;
@@ -217,17 +221,17 @@ class _HomeState extends State<Home> {
             onDestinationSelected: handleScreenChanged,
             selectedIndex: screenIndex,
             children: [
-              // NavigationDrawerDestination(
-              //   icon: Icon(Icons.language),
-              //   label: Text('Grammerly'),
-              // ),
-              // NavigationDrawerDestination(
-              //   icon: Icon(Icons.smart_toy),
-              //   label: Text('GPTWritter'),
-              // ),
               SizedBox(height: 10.h),
               NavigationDrawerDestination(
+                icon: Icon(Icons.home),
+                label: Text('Home'),
+              ),
+              NavigationDrawerDestination(
                 icon: Icon(Icons.settings),
+                label: Text('Settings'),
+              ),
+              NavigationDrawerDestination(
+                icon: Icon(Icons.info),
                 label: Text('About'),
               ),
             ]),
