@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
 
   bool isSpeaking = false;
   final chatGpt =
-      ChatGpt(apiKey: "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");
+      ChatGpt(apiKey: "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");
   StreamSubscription<CompletionResponse>? streamSubscription;
   SpeechToText _speechToText = SpeechToText();
 
