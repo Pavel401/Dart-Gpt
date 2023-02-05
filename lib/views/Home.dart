@@ -213,7 +213,7 @@ class _HomeState extends State<Home> {
         ),
         key: scaffoldKey,
         appBar: AppBar(
-          title: const Text("Promts"),
+          title: const Text("Promt"),
           actions: [
             Switch(
               // This bool value toggles the switch.

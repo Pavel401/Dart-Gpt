@@ -43,7 +43,7 @@ class _SetUpState extends State<SetUp> {
           children: [
             ElasticIn(
               child: Text(
-                "Enter your ChatGPT API Key",
+                "Enter your generated ChatGPT API Key",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
