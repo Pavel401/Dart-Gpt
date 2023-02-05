@@ -12,6 +12,7 @@ import 'package:promts/views/AboutPage.dart';
 import 'package:promts/views/setUp.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -90,8 +91,19 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
+  init() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final String? api = prefs.getString('key');
+
+    if (api == null) {
+      Navigator.of(context).restorablePush(_dialogBuilder);
+    }
+  }
+
   @override
   void initState() {
+    init();
     flutterTts.setStartHandler(() {
       ///This is called when the audio starts
       setState(() {
@@ -497,5 +509,31 @@ class _HomeState extends State<Home> {
         }
       });
     }
+  }
+
+  static Route _dialogBuilder(BuildContext context, Object? arguments) {
+    return DialogRoute(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('API Key is missing'),
+          content:
+              const Text('API key is needed to process the ChatGPT promts\n'
+                  'Go to next screen and save API key\n'),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Set-Up'),
+              onPressed: () {
+                Get.to(SetUp());
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
