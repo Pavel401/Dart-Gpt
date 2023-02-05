@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animate_do/animate_do.dart';
 import 'package:chat_gpt_flutter/chat_gpt_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -56,7 +57,7 @@ class _HomeState extends State<Home> {
 
   bool isSpeaking = false;
   final chatGpt =
-      ChatGpt(apiKey: "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");
+      ChatGpt(apiKey: "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");
   StreamSubscription<CompletionResponse>? streamSubscription;
   SpeechToText _speechToText = SpeechToText();
 
@@ -189,6 +190,7 @@ class _HomeState extends State<Home> {
           );
         },
       );
+      AnimationController animateController;
 
       return Scaffold(
         floatingActionButton: Padding(
@@ -340,108 +342,112 @@ class _HomeState extends State<Home> {
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 12),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        20,
-                        20,
-                        20,
-                        8,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Text(
-                              "ChatGPT Promts",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 1,
-                                fontSize: 30,
+                  : ElasticIn(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          20,
+                          20,
+                          20,
+                          8,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Text(
+                                "ChatGPT Promts",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1,
+                                  fontSize: 30,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return IntroCards(
-                                  card: list[index],
-                                );
-                              },
-                            ),
-                          ],
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 3,
+                                itemBuilder: (context, index) {
+                                  return IntroCards(
+                                    card: list[index],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: textEditingController,
-                    decoration: const InputDecoration(hintText: 'Type in...'),
-                    onFieldSubmitted: (_) => _sendMessage(),
+            ElasticIn(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: textEditingController,
+                      decoration: const InputDecoration(hintText: 'Type in...'),
+                      onFieldSubmitted: (_) => _sendMessage(),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
-                  style: IconButton.styleFrom(
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    disabledBackgroundColor: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.12),
-                    hoverColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.08),
-                    focusColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.12),
-                    highlightColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.12),
+                  const SizedBox(width: 12),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: _sendMessage,
+                    style: IconButton.styleFrom(
+                      foregroundColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      disabledBackgroundColor: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
+                      hoverColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.08),
+                      focusColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.12),
+                      highlightColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.12),
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                      _speechToText.isNotListening ? Icons.mic : Icons.stop),
-                  onPressed: _speechToText.isNotListening
-                      ? startListening
-                      : stopListening,
-                  style: IconButton.styleFrom(
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    disabledBackgroundColor: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.12),
-                    hoverColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.08),
-                    focusColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.12),
-                    highlightColor: Theme.of(context)
-                        .colorScheme
-                        .onSecondaryContainer
-                        .withOpacity(0.12),
+                  IconButton(
+                    icon: Icon(
+                        _speechToText.isNotListening ? Icons.mic : Icons.stop),
+                    onPressed: _speechToText.isNotListening
+                        ? startListening
+                        : stopListening,
+                    style: IconButton.styleFrom(
+                      foregroundColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      disabledBackgroundColor: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.12),
+                      hoverColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.08),
+                      focusColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.12),
+                      highlightColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondaryContainer
+                          .withOpacity(0.12),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

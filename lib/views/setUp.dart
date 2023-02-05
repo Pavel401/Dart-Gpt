@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:promts/views/Home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -39,49 +41,60 @@ class _SetUpState extends State<SetUp> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Text(
-              "Enter your ChatGPT API Key",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            ElasticIn(
+              child: Text(
+                "Enter your ChatGPT API Key",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(
               height: 2.h,
             ),
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'API Key',
+            ElasticIn(
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'API Key',
+                ),
               ),
             ),
             SizedBox(
               height: 2.h,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                if (controller.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Please enter a valid API key to continue"),
-                    ),
-                  );
-                } else {
-                  if (controller.text.contains('sk-')) {
-                    final prefs = await SharedPreferences.getInstance();
-
-                    await prefs.setString('key', controller.text.toString());
-
-                    // Navigation.
+            ElasticIn(
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (controller.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text("Please enter a valid API key to continue"),
+                      ),
+                    );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Please enter a valid API key to continue"),
-                    ));
+                    if (controller.text.contains('sk-')) {
+                      final prefs = await SharedPreferences.getInstance();
+
+                      await prefs.setString('key', controller.text.toString());
+
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Home()));
+
+                      // Navigation.
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text("Please enter a valid API key to continue"),
+                      ));
+                    }
                   }
-                }
-              },
-              child: Text('Save'),
+                },
+                child: Text('Save'),
+              ),
             ),
           ],
         ),

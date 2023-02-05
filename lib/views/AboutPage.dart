@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:promts/models/model_theme.dart';
@@ -36,124 +37,126 @@ class _AboutState extends State<About> {
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
           ),
         ),
-        body: Padding(
-          padding: EdgeInsets.only(top: 1.h, left: 2.w, right: 2.w),
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Container(
-                //     height: 25.h,
-                //     width: 40.w,
-                //     child: Image.asset("assets/images/logot.png")),
-                SizedBox(
-                    child: SvgPicture.asset(
-                  "assets/logo.svg",
-                  color: themeNotifier.isDark
-                      ? Color(0xFFe0e0e0)
-                      : Color(0xFF40414f),
-                  height: 20.h,
-                  width: 100.w,
-                )),
-                Text(
-                  "Promts",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  about[0],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  about[1],
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  about[2],
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  about[3],
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  "For any further queries contact me through:",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: 40.w, // <-- Button Width
-                      height: 5.h, // <-- Button height
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          // primary: HexColor("#202020"),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(10), // <-- Radius
+        body: ElasticIn(
+          child: Padding(
+            padding: EdgeInsets.only(top: 1.h, left: 2.w, right: 2.w),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Container(
+                  //     height: 25.h,
+                  //     width: 40.w,
+                  //     child: Image.asset("assets/images/logot.png")),
+                  SizedBox(
+                      child: SvgPicture.asset(
+                    "assets/logo.svg",
+                    color: themeNotifier.isDark
+                        ? Color(0xFFe0e0e0)
+                        : Color(0xFF40414f),
+                    height: 20.h,
+                    width: 100.w,
+                  )),
+                  Text(
+                    "Promts",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    about[0],
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    about[1],
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    about[2],
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    about[3],
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    "For any further queries contact me through:",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: 40.w, // <-- Button Width
+                        height: 5.h, // <-- Button height
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            // primary: HexColor("#202020"),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10), // <-- Radius
+                            ),
+                          ),
+                          onPressed: () async {
+                            String url = "https://github.com/Pavel401";
+                            if (!await launchUrl(Uri.parse(url))) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
+                          icon: FaIcon(
+                            FontAwesomeIcons.github,
+                          ),
+                          label: Text(
+                            "GitHub",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        onPressed: () async {
-                          String url = "https://github.com/Pavel401";
-                          if (!await launchUrl(Uri.parse(url))) {
-                            throw Exception('Could not launch $url');
-                          }
-                        },
-                        icon: FaIcon(
-                          FontAwesomeIcons.github,
-                        ),
-                        label: Text(
-                          "GitHub",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 40.w, // <-- Button Width
-                      height: 5.h, // <-- Button height
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          // primary: HexColor("#4154FC"),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(10), // <-- Radius
+                      SizedBox(
+                        width: 40.w, // <-- Button Width
+                        height: 5.h, // <-- Button height
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            // primary: HexColor("#4154FC"),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10), // <-- Radius
+                            ),
+                          ),
+                          onPressed: () async {
+                            String url =
+                                "https://www.linkedin.com/in/sk-mabud-alam-444a87133/";
+                            if (!await launchUrl(Uri.parse(url))) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
+                          icon: FaIcon(
+                            FontAwesomeIcons.linkedinIn,
+                            //
+                          ),
+                          label: Text(
+                            "LinkedIN",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        onPressed: () async {
-                          String url =
-                              "https://www.linkedin.com/in/sk-mabud-alam-444a87133/";
-                          if (!await launchUrl(Uri.parse(url))) {
-                            throw Exception('Could not launch $url');
-                          }
-                        },
-                        icon: FaIcon(
-                          FontAwesomeIcons.linkedinIn,
-                          //
-                        ),
-                        label: Text(
-                          "LinkedIN",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
