@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:promts/components/intro_card.dart';
@@ -29,7 +30,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
+  int cindex = 0;
   void handleScreenChanged(int selectedScreen) {
     if (selectedScreen == 0) {
       Get.back();
@@ -56,8 +57,7 @@ class _HomeState extends State<Home> {
   bool speechEnabled = false;
 
   bool isSpeaking = false;
-  final chatGpt =
-      ChatGpt(apiKey: "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");
+
   StreamSubscription<CompletionResponse>? streamSubscription;
   SpeechToText _speechToText = SpeechToText();
 
@@ -92,10 +92,13 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
+  String apikey = "";
+
   init() async {
     final prefs = await SharedPreferences.getInstance();
 
     final String? api = prefs.getString('key');
+    apikey = api.toString();
 
     if (api == null) {
       Navigator.of(context).restorablePush(_dialogBuilder);
@@ -267,7 +270,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Container(
                                 padding: EdgeInsets.all(8),
-                                child: Text('Q: ${questionAnswer.question}')),
+                                child: Text('${questionAnswer.question}')),
                             const SizedBox(height: 12),
                             if (answer.isEmpty && loading)
                               SizedBox(
@@ -285,54 +288,73 @@ class _HomeState extends State<Home> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        AnimatedOpacity(
-                                          duration: Duration(milliseconds: 100),
-                                          opacity: isSpeaking ? 1.0 : 0.0,
-                                          child: IconButton(
-                                            isSelected: false,
-                                            onPressed: () async {
-                                              initSetting();
-
-                                              setState(() {
-                                                isSpeaking = false;
-                                              });
-                                              await flutterTts.stop();
-                                            },
-                                            icon: Icon(Icons.stop),
-                                          ),
+                                        SvgPicture.asset(
+                                          "assets/gpt.svg",
+                                          height: 4.h,
+                                          width: 10.w,
                                         ),
-                                        IconButton(
-                                          isSelected: false,
-                                          selectedIcon: Icon(Icons.volume_down),
-                                          onPressed: () async {
-                                            initSetting();
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            cindex == index
+                                                ? AnimatedOpacity(
+                                                    duration: Duration(
+                                                        milliseconds: 100),
+                                                    opacity:
+                                                        isSpeaking ? 1.0 : 0.0,
+                                                    child: IconButton(
+                                                      isSelected: false,
+                                                      onPressed: () async {
+                                                        initSetting();
 
-                                            setState(() {
-                                              isSpeaking = true;
-                                            });
-                                            await flutterTts.speak(answer);
-                                          },
-                                          icon: Icon(Icons.volume_up),
+                                                        setState(() {
+                                                          isSpeaking = false;
+                                                        });
+                                                        await flutterTts.stop();
+                                                      },
+                                                      icon: Icon(Icons.stop),
+                                                    ),
+                                                  )
+                                                : SizedBox(),
+                                            IconButton(
+                                              isSelected: false,
+                                              selectedIcon:
+                                                  Icon(Icons.volume_down),
+                                              onPressed: () async {
+                                                initSetting();
+                                                cindex = index;
+
+                                                setState(() {
+                                                  isSpeaking = true;
+                                                });
+                                                await flutterTts.speak(answer);
+                                              },
+                                              icon: Icon(Icons.volume_up),
+                                            ),
+                                            IconButton(
+                                                onPressed: () {
+                                                  Share.share(
+                                                      'Answear: $answer',
+                                                      subject:
+                                                          'Question: ${questionAnswer.question}');
+                                                },
+                                                icon: Icon(Icons.share)),
+                                            IconButton(
+                                                onPressed: () async {
+                                                  await Clipboard.setData(
+                                                      ClipboardData(
+                                                          text: "$answer"));
+                                                },
+                                                icon: Icon(Icons.copy))
+                                          ],
                                         ),
-                                        IconButton(
-                                            onPressed: () {
-                                              Share.share('Answear: $answer',
-                                                  subject:
-                                                      'Question: ${questionAnswer.question}');
-                                            },
-                                            icon: Icon(Icons.share)),
-                                        IconButton(
-                                            onPressed: () async {
-                                              await Clipboard.setData(
-                                                  ClipboardData(
-                                                      text: "$answer"));
-                                            },
-                                            icon: Icon(Icons.copy))
                                       ],
                                     ),
-                                    Text('A: $answer'),
+                                    Text('$answer'),
                                   ],
                                 ),
                               ),
@@ -476,8 +498,9 @@ class _HomeState extends State<Home> {
     });
 
     final testRequest = CompletionRequest(
-      prompt: question,
+      prompt: [question],
       stream: true,
+      model: ChatGptModel.textDavinci003,
       maxTokens: 4000,
     );
     await _streamResponse(testRequest);
@@ -487,6 +510,8 @@ class _HomeState extends State<Home> {
   _streamResponse(CompletionRequest request) async {
     streamSubscription?.cancel();
     try {
+      final chatGpt = ChatGpt(apiKey: apikey);
+
       final stream = await chatGpt.createCompletionStream(request);
       streamSubscription = stream?.listen((event) {
         setState(

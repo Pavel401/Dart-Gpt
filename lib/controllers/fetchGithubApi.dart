@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:promts/Model/ContributorModel.dart';
+import 'package:promts/models/ContributorModel.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -34,8 +34,7 @@ class ContributorController extends GetxController {
     //   ),
     //   barrierDismissible: false,
     // );
-    String token =
-        "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";
+    String token = "YOU DONT NEED TO PUT ANYTHING HERE";
     Map<String, String> header = {
       'Authorization': 'Bearer $token',
       'X-GitHub-Api-Version': '2022-11-28',
