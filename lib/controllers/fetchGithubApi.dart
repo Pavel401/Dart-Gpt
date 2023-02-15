@@ -34,7 +34,8 @@ class ContributorController extends GetxController {
     //   ),
     //   barrierDismissible: false,
     // );
-    String token = "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";
+    String token =
+        "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";
     Map<String, String> header = {
       'Authorization': 'Bearer $token',
       'X-GitHub-Api-Version': '2022-11-28',
@@ -61,7 +62,7 @@ class ContributorController extends GetxController {
       Get.forceAppUpdate();
       // Get.back();
     } else if (response.statusCode == 401) {
-      Get.back();
+      // Get.back();
     }
   }
 }
