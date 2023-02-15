@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.promts">
-      <queries>
+    <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
